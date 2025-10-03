@@ -1,0 +1,82 @@
+.guest-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.guest-form {
+    padding-left: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.guest-title {
+    letter-spacing: 3px;
+    font-size: 50px;
+}
+
+.guest-input {
+    width: 60%;
+    height: 65px;
+    font-size: 17px;
+    padding-left: 20px;
+    color: #666666;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    border: 1px solid #EEEEEE;
+    outline: none;
+    box-shadow: 0px 0cap 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.guest-par {
+    color: #a3a2a2;
+}
+
+.guest-button {
+    background: #FE724C;
+    border-radius: 25px;
+    width: 80%;
+    min-width: 240px;
+    height: 60px;
+    font-size: 18px;
+    color: white;
+    border-width: 0;
+    box-shadow: 5px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.guest-button:hover {
+    background: #f87e4e;
+}
+
+.low-bar {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.any-accaunt {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+.go-login-or-registr-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #FE724C;
+    font-size: 18px;
+}

@@ -1,0 +1,27 @@
+.search-panel {
+    width: 350px;
+    height: 50px;
+    color: #9AA0B4;
+    background-color: #FCFCFD;
+    border: 1px solid #EFEFEF;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.search-image {
+    width: 18px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+}
+
+.search-input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
