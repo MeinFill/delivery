@@ -1,0 +1,61 @@
+.basket-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.basket-item-image {
+  width: 110px;
+  height: 110px;
+  border-radius: 30px;
+}
+
+.basket-item-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  margin-left: 20px;
+  font-size: 21px;
+}
+
+.basket-item-price {
+  color: #fe724c;
+}
+
+.basket-item-count-div {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  font-size: 21px;
+  gap: 20px;
+}
+
+.basket-item-subtract-button {
+  font-size: 30px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: transparent;
+  border-color: #fe724c;
+}
+
+.basket-item-add-button {
+  font-size: 30px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #fe724c;
+  border: none;
+  color: white;
+}
+
+.basket-item-remove-button {
+  font-size: 30px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #fe724c;
+}

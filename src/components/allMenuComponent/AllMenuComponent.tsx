@@ -1,53 +1,70 @@
-import './AllMenuComponent.css'
-import ProductCard from '../productCard/ProductCard';
+import axios, { AxiosError } from "axios"
+import { useEffect, useState } from "react"
+import { useOutletContext } from "react-router-dom"
+import type { Product } from "../../interfaces/ProductInterface"
+import ProductCard from "../productCard/ProductCard"
+import "./AllMenuComponent.css"
 
-function AllMenuComponent(){
-    return (
-        <div className='cards-div'>
-                <ProductCard
-                    id={1}
-                    title='Чизбургер'
-                    price='160'
-                    description='Булочка, котлета свиная, огурец, соус спайси, сыр чеддар'
-                    image='/src/assets/images/cheesburger.png'
-                    />
-                <ProductCard
-                    id={2}
-                    title='Бигмак'
-                    price='520'
-                    description='Булочка, котлета куриная, соус цезарь, сыр чеддар, листья салата, помидоры'
-                    image='/src/assets/images/bigmak.png'
-                    />
-                <ProductCard
-                    id={3}
-                    title='Гамбургер'
-                    price='1140'
-                    description='Булочка, 2 котлеты куриная, огурец, соус цезарь + сырный, сыр чеддар, листья салата, помидоры, лук'
-                    image='/src/assets/images/gamburger.png'
-                    />
-                <ProductCard
-                    id={4}
-                    title='Курица-терияки 30 см'
-                    price='640'
-                    description='Курица, лук красный, соус терияки, соус сливочный, сыр чеддар, кунжут'
-                    image='/src/assets/images/chicken-ter.png'
-                    />
-                <ProductCard
-                    id={5}
-                    title='Пепперони 30 см'
-                    price='710'
-                    description='Колбаса, сыр чеддар, лук красный'
-                    image='/src/assets/images/pepperoni.png'
-                    />
-                <ProductCard
-                    id={6}
-                    title='Фермерская экстра'
-                    price='1140'
-                    description='Сыр моцарелла, куриса, соус сливочный, ветчина, бекон, шампиньоны, лук красный, зеленый перец, орегано'
-                    image='/src/assets/images/fermerextra.png'
-                    />
-        </div>
-    )
+type MenuOutletContext = {
+  filter: string
+  setFilter: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default AllMenuComponent;
+function AllMenuComponent() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | undefined>()
+  const { filter } = useOutletContext<MenuOutletContext>()
+
+  useEffect(() => {
+    getMenu(filter)
+  }, [filter])
+
+  const getMenu = async (name?: string) => {
+    try {
+      setLoading(true)
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve()
+        }, 200)
+      })
+      const { data } = await axios.get<Product[]>(
+        `https://purpleschool.ru/pizza-api-demo/products`,
+        {
+          params: { name },
+        }
+      )
+      setProducts(data)
+      setLoading(false)
+    } catch (e) {
+      console.log(e)
+      if (e instanceof AxiosError) {
+        setError(e.message)
+      }
+      setLoading(false)
+      return
+    }
+  }
+
+  return (
+    <div className="cards-div">
+      {error && <>{error}</>}
+      {!isLoading &&
+        products.length > 0 &&
+        products.map((p) => (
+          <ProductCard
+            key={p.id}
+            id={p.id}
+            title={p.name}
+            description={p.ingredients.join(", ")}
+            price={p.price}
+            image={p.image}
+          />
+        ))}
+      {isLoading && <>Идет загрузка...</>}
+      {!isLoading && products.length === 0 && <>Ничего не найдено</>}
+    </div>
+  )
+}
+
+export default AllMenuComponent

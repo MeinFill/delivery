@@ -32,6 +32,10 @@ li {
     margin: 0;
 }
 
+.away-button {
+    all: unset;
+}
+
 .exit-link {
     cursor: pointer;
     text-decoration: underline;

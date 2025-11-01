@@ -1,97 +1,128 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
-import './App.css'
-import RegistrationRout from './routes/registration/RegistrationRout'
-import ErrorRout from './routes/error/ErrorRout'
-import LoginRout from './routes/login/LoginRout'
-import GuestLayout from './layouts/guestLayout/GuestLayout'
-import MainLayout from './layouts/mainLayout/MainLayout'
-import MenuRout from './routes/menu/MenuRout'
-import BasketRout from './routes/basket/BasketRout'
-import AllMenuComponent from './components/allMenuComponent/AllMenuComponent'
-import PizzaComponent from './components/pizzaComponent/PizzaComponent'
-import BurgerComponent from './components/burgerComponent/BurgerComponent'
-import ProductRout from './routes/productRout/ProductRout'
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import "./App.css"
+import GuestLayout from "./layouts/guestLayout/GuestLayout"
+import MainLayout from "./layouts/mainLayout/MainLayout"
+import ErrorRout from "./routes/error/ErrorRout"
+import LoginRout from "./routes/login/LoginRout"
+import RegistrationRout from "./routes/registration/RegistrationRout"
+
+import axios from "axios"
+import { lazy, Suspense } from "react"
+import AllMenuComponent from "./components/allMenuComponent/AllMenuComponent"
+import BurgerComponent from "./components/burgerComponent/BurgerComponent"
+import DesertsComponent from "./components/desertsComponent/DesertsComponent"
+import DrinksComponent from "./components/drinksComponent/DrinksComponent"
+import MainCourseComponent from "./components/mainCourseComponent/MainCourseComponent"
+import PizzaComponent from "./components/pizzaComponent/PizzaComponent"
+import SauceComponent from "./components/sauceComponent/SauceComponent"
+import SoupComponent from "./components/soupComponent/SoupComponent"
+import { RequireAuth } from "./helpers/RequireAuth"
+import BasketRout from "./routes/basket/BasketRout"
+import ProductRout from "./routes/productRout/ProductRout"
+
+import { Provider } from "react-redux"
+import { InitComponent } from "./components/initComponent/initComponent"
+import { store } from "./store/Store"
+
+const Menu = lazy(() => import("./routes/menu/MenuRout"))
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Navigate to="/registration" replace />,
-  },
-  {
-    element: <GuestLayout />,
+    path: "/",
+    element: <InitComponent />,
     children: [
       {
-        path: '/registration',
-        element: <RegistrationRout />,
-      },
-      {
-        path: '/login',
-        element: <LoginRout />,
-      },
-    ],
-  },
-  {
-    element: <MainLayout />,
-    children: [
-      {
-        path: '/menu',
-        element: <MenuRout />,
+        element: <GuestLayout />,
         children: [
           {
-            index: true,
-            element: <AllMenuComponent/>
+            path: "/registration",
+            element: <RegistrationRout />,
           },
           {
-            path: 'pizza',
-            element: <PizzaComponent/>
+            path: "/login",
+            element: <LoginRout />,
           },
-          {
-            path: 'burgers',
-            element: <BurgerComponent/>
-          },
-          {
-            path: 'soup',
-            element: <PizzaComponent/>
-          },
-          {
-            path: 'main-course',
-            element: <BurgerComponent/>
-          },
-          {
-            path: 'deserts',
-            element: <PizzaComponent/>
-          },
-          {
-            path: 'drinks',
-            element: <BurgerComponent/>
-          },
-          {
-            path: 'sauce',
-            element: <BurgerComponent/>
-          },
-          {
-            path: 'product/:id',
-            element: <ProductRout/>
-          }
         ],
       },
       {
-        path: '/basket',
-        element: <BasketRout />
-      }
+        element: (
+          <RequireAuth>
+            <MainLayout />
+          </RequireAuth>
+        ),
+        children: [
+          {
+            path: "/menu",
+            element: (
+              <Suspense fallback={<>Загрузка...</>}>
+                <Menu />
+              </Suspense>
+            ),
+            children: [
+              {
+                index: true,
+                element: <AllMenuComponent />,
+              },
+              {
+                path: "pizza",
+                element: <PizzaComponent />,
+              },
+              {
+                path: "burgers",
+                element: <BurgerComponent />,
+              },
+              {
+                path: "soup",
+                element: <SoupComponent />,
+              },
+              {
+                path: "main-course",
+                element: <MainCourseComponent />,
+              },
+              {
+                path: "deserts",
+                element: <DesertsComponent />,
+              },
+              {
+                path: "drinks",
+                element: <DrinksComponent />,
+              },
+              {
+                path: "sauce",
+                element: <SauceComponent />,
+              },
+              {
+                path: "product/:id",
+                element: <ProductRout />,
+                errorElement: <>Ошибка</>,
+                loader: async ({ params }) => {
+                  const { data } = await axios.get(
+                    `https://purpleschool.ru/pizza-api-demo/products/${params.id}`
+                  )
+                  return data
+                },
+              },
+            ],
+          },
+          {
+            path: "/basket",
+            element: <BasketRout />,
+          },
+        ],
+      },
+      {
+        path: "*",
+        element: <ErrorRout />,
+      },
     ],
   },
-  {
-    path: '*',
-    element: <ErrorRout />,
-  },
-]);
+])
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <RouterProvider router={router}></RouterProvider>
-    </>
+    </Provider>
   )
 }
 

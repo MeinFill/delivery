@@ -1,6 +1,7 @@
 import ProductContent from "../../components/productContent/ProductContent"
 
 function ProductRout() {
+  
   return (
     <>
       <ProductContent></ProductContent>
