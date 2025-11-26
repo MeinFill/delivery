@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import "./App.css"
 import GuestLayout from "./layouts/guestLayout/GuestLayout"
 import MainLayout from "./layouts/mainLayout/MainLayout"
@@ -27,6 +27,10 @@ import { store } from "./store/Store"
 const Menu = lazy(() => import("./routes/menu/MenuRout"))
 
 const router = createBrowserRouter([
+  {
+    path: "",
+    element: <Navigate to="/login" replace />,
+  },
   {
     path: "/",
     element: <InitComponent />,
